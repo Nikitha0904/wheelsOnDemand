@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import LoginForm from './login/page';
+import RequestsTable from './facultydashboard/RequestsTable';
+import FacultyDashboard from './facultydashboard/page';
 
 const Home = () => {
   return (
@@ -8,7 +10,8 @@ const Home = () => {
         <title>Wheels On Demand</title>
         <meta name="description" content="Wheels On Demand" />
       </Head>
-      <LoginForm />
+      {/* <LoginForm /> */}
+      <FacultyDashboard/>
     </>
   );
 };

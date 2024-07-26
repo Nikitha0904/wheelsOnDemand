@@ -19,7 +19,6 @@ export async function POST(request) {
 
     const user = rows[0];
 
-    // Compare the provided password with the hashed password
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
