@@ -23,7 +23,7 @@ const MyNavbar = () => {
   };
 
   return (
-    <nav className=" bg-gray-800 p-4 fixed w-full">
+    <nav className=" bg-gray-800 p-4 fixed w-full mb-8">
       <div className="container mx-auto flex items-center justify-between">
         
         

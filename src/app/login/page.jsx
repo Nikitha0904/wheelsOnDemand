@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';  
+import { UserContext } from '../contexts/userContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter(); 
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     if (email.trim() === '' || password.trim() === '') {
@@ -34,14 +36,24 @@ const LoginForm = () => {
 
       console.log('Login successful', data);
 
-      const { name, userId, college_id, role_id } = data.user;
+      // Extract user details
+      const { name, id, college_id, role_id } = data.user;
 
+      // Set user details in context
+      setUser({
+        name,
+        userId: id,
+        college_id,
+        role_id,
+      });
+
+      // Redirect based on role_id
       if (role_id === 1) {
-        router.push(`/facultyDashboard/${userId}/${name}/${college_id}`);
+        router.push(`/facultydashboard`);
       } else if (role_id === 2) {
-        router.push(`/officeDashboard/${userId}/${name}/${college_id}`);
+        router.push(`/officeDashboard`);
       } else if (role_id === 3) {
-        router.push(`/adminDashboard/${userId}/${name}/${college_id}`);
+        router.push(`/adminDashboard`);
       } else {
         setErrorMessage('Unknown role.');
       }
