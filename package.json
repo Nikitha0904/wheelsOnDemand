@@ -9,34 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@hookform/resolvers": "^3.9.0",
-    "@radix-ui/react-label": "^2.1.0",
-    "@radix-ui/react-select": "^2.1.1",
-    "@radix-ui/react-slot": "^1.1.0",
-    "axios": "^1.7.2",
-=======
     "@heroicons/react": "^1.0.6",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
->>>>>>> dee51fe96228fe7748ceb6ec8fbb888a28bcf0a7
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.412.0",
     "mysql2": "^3.10.3",
     "next": "14.2.5",
+    "package.json": "^2.0.1",
     "react": "^18",
     "react-dom": "^18",
-<<<<<<< HEAD
-    "react-hook-form": "^7.52.1",
-    "react-toastify": "^10.0.5",
-    "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8"
-=======
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
->>>>>>> dee51fe96228fe7748ceb6ec8fbb888a28bcf0a7
   },
   "devDependencies": {
     "eslint": "^8",
