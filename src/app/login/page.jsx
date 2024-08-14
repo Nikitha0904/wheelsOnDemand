@@ -37,7 +37,7 @@ const LoginForm = () => {
       const { name, userId, college_id, role_id } = data.user;
 
       if (role_id === 1) {
-        router.push(`/facultyDashboard/${userId}/${name}/${college_id}`);
+        router.push(`/facultydashboard`);
       } else if (role_id === 2) {
         router.push(`/officeDashboard/${userId}/${name}/${college_id}`);
       } else if (role_id === 3) {
