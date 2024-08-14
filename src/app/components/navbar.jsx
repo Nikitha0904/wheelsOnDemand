@@ -6,16 +6,26 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { useRouter } from 'next/navigation';  
+
 
 import { Button } from "@/components/ui/button";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../contexts/userContext";
 
 const MyNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter(); 
+  const { setUser } = useContext(UserContext);
 
+  
   const handleLogout = () => {
-    console.log("Logging out...");
+      setUser(null);  
+      localStorage.removeItem('user');  
+      router.push('/');  
+
+    
   };
 
   const toggleMenu = () => {

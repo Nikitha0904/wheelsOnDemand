@@ -39,7 +39,7 @@ const LoginForm = () => {
       // Extract user details
       const { name, id, college_id, role_id } = data.user;
 
-      // Set user details in context
+      // Set user details in context and localStorage
       setUser({
         name,
         userId: id,
