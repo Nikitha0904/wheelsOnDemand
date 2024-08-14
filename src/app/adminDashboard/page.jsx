@@ -6,10 +6,9 @@ import RequestsTable from "../components/RequestsTable";
 import RequestModal from "../components/RequestModal";
 import GuestRequestForm from "../form/GuestRequestForm";
 
-export default function FacultyDashboard() {
+export default function adminDashboard() {
   const { user } = useContext(UserContext);
-  console.log("User Context:", user);
-  
+
   const userId = user?.userId;
   const role_id = user?.role_id;
 
@@ -20,25 +19,24 @@ export default function FacultyDashboard() {
 
   useEffect(() => {
     if (userId && role_id) {
-      fetchDashboardData({ userId, role_id });
+      fetchDashboardData(userId, role_id);
+    }
+  }, [userId, role_id]);
+
+  useEffect(() => {
+    if (userId) {
       fetchRequests();
     }
-  }, [userId, role_id, currentView]);
+  }, [userId, currentView]);
 
-  const fetchDashboardData = async ({ userId, role_id }) => {
+  const fetchDashboardData = async (userId, role_id) => {
     try {
-      console.log("User ID:", userId);
-      console.log("Role ID:", role_id);
-
-      const body = JSON.stringify({ userId, role_id });
-      console.log("Request Body:", body);
-
       const res = await fetch('/api/dashboard', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body
+        body: JSON.stringify({ userId, role_id })
       });
 
       if (!res.ok) {
@@ -59,7 +57,7 @@ export default function FacultyDashboard() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId, status: currentView })
+        body: JSON.stringify({ userId, role_id, status: currentView })
       });
 
       if (!res.ok) {

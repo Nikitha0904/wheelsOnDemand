@@ -19,7 +19,6 @@ export async function POST(request) {
 
     const user = rows[0];
 
-    // Compare the provided password with the hashed password
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -28,12 +27,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       message: 'Login successful',
-      user: {
-        name: user.name,
-        userId: user.id,
-        college_id: user.college_id,
-        role_id: user.role_id,
-      },
+      user
     });
 
   } catch (error) {
