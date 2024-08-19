@@ -1,22 +1,26 @@
 "use client";
-import { Button } from "@/components/ui/button"
 
-export default function DashboardSidebar({ dashboardData, onViewChange }) {
+export default function DashboardBoxes({ dashboardData }) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow  h-screen mb-0">
-      <h5 className="text-lg font-semibold mb-4">Request Details</h5>
-      <Button className="w-full mb-2 justify-between bg-gray-800" onClick={() => onViewChange('pending')}>
-        <span>Pending Requests</span>
-        <span>{dashboardData.pendingRequests}</span>
-      </Button>
-      <Button className="w-full mb-2 justify-between bg-gray-800" onClick={() => onViewChange('approved')}>
-        <span>Approved Requests</span>
-        <span>{dashboardData.approvedRequests}</span>
-      </Button>
-      <Button className="w-full justify-between bg-gray-800" onClick={() => onViewChange('rejected')}>
-        <span>Rejected Requests</span>
-        <span>{dashboardData.rejectedRequests}</span>
-      </Button>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="bg-white p-4 rounded-lg shadow text-center">
+        <div>
+          <h5 className="text-lg font-semibold mb-2">Pending Requests</h5>
+          <span className="text-2xl">{dashboardData.pendingRequests}</span>
+        </div>
+      </div>
+      <div className="bg-white p-4 rounded-lg shadow text-center">
+        <div>
+          <h5 className="text-lg font-semibold mb-2">Approved Requests</h5>
+          <span className="text-2xl">{dashboardData.approvedRequests}</span>
+        </div>
+      </div>
+      <div className="bg-white p-4 rounded-lg shadow text-center">
+        <div>
+          <h5 className="text-lg font-semibold mb-2">Rejected Requests</h5>
+          <span className="text-2xl">{dashboardData.rejectedRequests}</span>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

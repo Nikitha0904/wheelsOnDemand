@@ -45,7 +45,7 @@ const MyNavbar = () => {
         </button>
 
 
-        <div className={`absolute top-14 left-0 right-0 bg-gray-800 sm:bg-transparent sm:static ${isOpen ? 'block' : 'hidden'} sm:flex`}>
+        <div className={`absolute top-14 left-0 right-0 bg-gray-1000 sm:static ${isOpen ? 'block' : 'hidden'} sm:flex`}>
           <NavigationMenu>
             <NavigationMenuList className={`flex flex-col sm:flex-row sm:space-x-4 ${isOpen ? 'space-y-4' : 'space-y-0'}`}>
               <NavigationMenuItem className={`transition-all ${isOpen ? 'h-8' : ''}`}>
