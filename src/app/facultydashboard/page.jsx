@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
-import DashboardSidebar from '../components/DashboardSidebar';
+import DashboardBoxes from '../components/DashboardSidebar'; // Updated import
 import { UserContext } from "../contexts/userContext";
 import RequestsTable from "../components/RequestsTable";
 import RequestModal from "../components/RequestModal";
@@ -84,16 +84,14 @@ export default function FacultyDashboard() {
   return (
     <div style={{ paddingTop: "5rem", paddingLeft: "2rem", paddingRight: "2rem" }} className="h-[calc(100vh-8rem)]">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">Welcome {user?.name || 'Guest'}</h2>
-        <GuestRequestForm />
+        <div className="flex items-center space-x-4">
+          <h2 className="text-3xl font-bold">Welcome {user?.name || 'Guest'}</h2>
+          <GuestRequestForm />
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-1 flex flex-col h-[calc(100vh-10rem)] mb-0">
-          <DashboardSidebar dashboardData={dashboardData} onViewChange={setCurrentView} />
-        </div>
-        <div className="md:col-span-3">
-          <RequestsTable requests={requests} currentView={currentView} onViewDetails={handleViewRequestDetails} />
-        </div>
+      <DashboardBoxes dashboardData={dashboardData} onViewChange={setCurrentView} />
+      <div className="w-full mt-8">
+        <RequestsTable requests={requests} currentView={currentView} onViewDetails={handleViewRequestDetails} />
       </div>
       <RequestModal isOpen={!!selectedRequest} onClose={handleCloseModal} request={selectedRequest} userName={user?.userName} />
     </div>

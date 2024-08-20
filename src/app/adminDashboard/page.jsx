@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/userContext";
 import RequestsTable from "../components/RequestsTable";
 import RequestModal from "../components/RequestModal";
 import GuestRequestForm from "../form/GuestRequestForm";
-import DashboardBoxes from "../components/DashboardSidebar"; // Import the updated component
+import DashboardBoxes from "../components/DashboardSidebar"; // Import the new component
 
 export default function AdminDashboard() {
   const { user } = useContext(UserContext);
@@ -13,17 +13,21 @@ export default function AdminDashboard() {
   const role_id = user?.role_id;
 
   const [dashboardData, setDashboardData] = useState({ pendingRequests: 0, approvedRequests: 0, rejectedRequests: 0 });
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [allRequests, setAllRequests] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [currentView, setCurrentView] = useState('pending');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     if (userId && role_id) {
       fetchDashboardData(userId, role_id);
-      fetchPendingRequests();
-      fetchAllRequests();
     }
   }, [userId, role_id]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchRequests();
+    }
+  }, [userId, currentView]);
 
   const fetchDashboardData = async (userId, role_id) => {
     try {
@@ -46,14 +50,14 @@ export default function AdminDashboard() {
     }
   };
 
-  const fetchPendingRequests = async () => {
+  const fetchRequests = async () => {
     try {
       const res = await fetch(`/api/requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId, role_id, status: 'pending' })
+        body: JSON.stringify({ userId, role_id, status: currentView })
       });
 
       if (!res.ok) {
@@ -61,30 +65,9 @@ export default function AdminDashboard() {
       }
 
       const data = await res.json();
-      setPendingRequests(data);
+      setRequests(data);
     } catch (error) {
-      console.error('Error fetching pending requests:', error);
-    }
-  };
-
-  const fetchAllRequests = async () => {
-    try {
-      const res = await fetch(`/api/requests`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, role_id })
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-
-      const data = await res.json();
-      setAllRequests(data);
-    } catch (error) {
-      console.error('Error fetching all requests:', error);
+      console.error('Error fetching requests:', error);
     }
   };
 
@@ -104,20 +87,15 @@ export default function AdminDashboard() {
           <GuestRequestForm />
         </div>
       </div>
-      <DashboardBoxes dashboardData={dashboardData} />
-      
-      {/* Pending Requests Table */}
-      <div className="mb-8">
-        {/* <h3 className="text-2xl font-bold mb-4">Pending Requests</h3> */}
-        <RequestsTable requests={pendingRequests} currentView="pending" onViewDetails={handleViewRequestDetails} />
+      <DashboardBoxes dashboardData={dashboardData} onViewChange={setCurrentView} />
+      <div className="flex flex-col w-full">
+        <RequestsTable
+          requests={requests}
+          currentView={currentView}
+          onViewDetails={handleViewRequestDetails}
+          className="w-full"
+        />
       </div>
-
-      {/* All Requests Table */}
-      <div className="mb-8">
-        {/* <h3 className="text-2xl font-bold mb-4">All Requests</h3> */}
-        <RequestsTable requests={allRequests} currentView="all" onViewDetails={handleViewRequestDetails} />
-      </div>
-
       <RequestModal isOpen={!!selectedRequest} onClose={handleCloseModal} request={selectedRequest} userName={user?.userName} />
     </div>
   );
