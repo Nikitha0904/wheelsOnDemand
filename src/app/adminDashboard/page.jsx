@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../contexts/userContext";
-import RequestsTable from "../components/RequestsTable";
+import RequestsTable from "../components/AdminRequests";
 import RequestModal from "../components/RequestModal";
 import GuestRequestForm from "../form/GuestRequestForm";
 import DashboardBoxes from "../components/DashboardSidebar"; // Import the new component

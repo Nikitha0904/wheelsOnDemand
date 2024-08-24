@@ -49,10 +49,16 @@ export default function RequestsTable({ requests, currentView, onViewDetails }) 
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="outline">Reject</Button>
-                      <Button variant="success">Accept</Button>
-                    </div>
+                    {currentView === 'rejected' ? (
+                      <span className="text-red-500">Rejected</span>
+                    ) : currentView === 'approved' ? (
+                      <span className="text-green-500">Accepted</span>
+                    ) : (
+                      <div className="flex gap-1">
+                        <Button variant="outline">Reject</Button>
+                        <Button variant="success">Accept</Button>
+                      </div>
+                    )}
                   </TableCell>
                 </TableRow>
               ))

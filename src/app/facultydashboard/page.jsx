@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from "react";
 import DashboardBoxes from '../components/DashboardSidebar'; // Updated import
 import { UserContext } from "../contexts/userContext";
-import RequestsTable from "../components/RequestsTable";
+import RequestsTable from "../components/FacultyRequestsTable";
 import RequestModal from "../components/RequestModal";
 import GuestRequestForm from "../form/GuestRequestForm";
 
