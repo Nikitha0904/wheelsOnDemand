@@ -15,18 +15,36 @@ export async function POST(req) {
     let params = [];
 
     if (role_id == 3) {
-      query = `
+      if (status === 'pending') {
+        query = `
+          SELECT * FROM requests
+          WHERE  (status = 'pending' OR status = 'approved by office')
+        `;
+        params = [];
+      } else {
+        query = `
         SELECT * FROM requests
         ${status ? 'WHERE status = ?' : ''}
       `;
       params = status ? [status] : [];
-    } else if(role_id == 2){
-      query = `
-        SELECT * FROM requests
-        WHERE college_id = ?${status ? ' AND status = ?' : ''}
-      `;
-      params = status ? [college_id, status] : [college_id];
-    } else {
+      }
+     
+    } else if (role_id == 2) {
+      if (status === 'pending') {
+        query = `
+          SELECT * FROM requests
+          WHERE college_id = ? AND (status = 'pending' OR status = 'approved by office')
+        `;
+        params = [college_id];
+      } else {
+        query = `
+          SELECT * FROM requests
+          WHERE college_id = ?${status ? ' AND status = ?' : ''}
+        `;
+        params = status ? [college_id, status] : [college_id];
+      }
+    }
+     else {
       query = `
         SELECT * FROM requests
         WHERE id = ?${status ? ' AND status = ?' : ''}

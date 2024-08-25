@@ -30,7 +30,7 @@ export async function POST(req) {
       query = `
         SELECT 
           COUNT(*) AS totalRequests,
-          SUM(status = 'Approved') AS approvedRequests,
+          SUM(status = 'Approved' ) AS approvedRequests,
           SUM(status = 'Rejected') AS rejectedRequests,
           SUM(status = 'Pending' OR status = 'approved by office') AS pendingRequests
         FROM requests

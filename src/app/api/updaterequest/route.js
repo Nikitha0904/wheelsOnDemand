@@ -1,33 +1,27 @@
-// pages/api/update-request-status.js
-
 import { connectToDatabase } from "@/lib/db";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
-  const { requestId, status } = req.body;
-
-  if (!requestId || !status) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
-
+export async function POST(req, res) {
   try {
+    const { requestId, status } = await req.json();
+
+    if (!requestId || !status) {
+      return new Response(JSON.stringify({ message: "Missing required fields" }), { status: 400 });
+    }
+
     const connection = await connectToDatabase();
 
     const [result] = await connection.execute(
-      'UPDATE requests SET status = ? WHERE id = ?',
+      'UPDATE requests SET status = ? WHERE request_id = ?',
       [status, requestId]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Request not found" });
+      return new Response(JSON.stringify({ message: "Request not found" }), { status: 404 });
     }
 
-    return res.status(200).json({ message: "Request status updated successfully" });
+    return new Response(JSON.stringify({ message: "Request status updated successfully" }), { status: 200 });
   } catch (error) {
     console.error("Failed to update request status:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return new Response(JSON.stringify({ message: "Internal server error" }), { status: 500 });
   }
 }
