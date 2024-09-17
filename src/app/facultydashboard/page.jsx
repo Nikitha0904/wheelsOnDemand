@@ -85,7 +85,7 @@ export default function FacultyDashboard() {
     <div style={{ paddingTop: "5rem", paddingLeft: "2rem", paddingRight: "2rem" }} className="h-[calc(100vh-8rem)]">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center space-x-4">
-          <h2 className="text-3xl font-bold">Welcome {user?.name || 'Guest'}</h2>
+          <h2 className="text-3xl font-bold">Welcome {user?.username || 'Guest'}</h2>
           <GuestRequestForm />
         </div>
       </div>

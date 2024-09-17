@@ -6,13 +6,12 @@ import { UserContext } from '../contexts/userContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter(); 
   const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
-    if (email.trim() === '' || password.trim() === '') {
+    if (email.trim() === '' ) {
       setErrorMessage('Please enter both email and password.');
       return;
     }
@@ -23,7 +22,7 @@ const LoginForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email }),
       });
 
       if (!res.ok) {
@@ -37,22 +36,21 @@ const LoginForm = () => {
       console.log('Login successful', data);
 
       // Extract user details
-      const { name, id, college_id, role_id } = data.user;
+      const { username, id,  role } = data.user;
 
       // Set user details in context and localStorage
       setUser({
-        name,
+        username,
         userId: id,
-        college_id,
-        role_id,
+        role,
       });
 
       // Redirect based on role_id
-      if (role_id === 1) {
+      if (role === "Admin") {
         router.push(`/facultydashboard`);
-      } else if (role_id === 2) {
+      } else if (role === "AdminOffice") {
         router.push(`/officeDashboard`);
-      } else if (role_id === 3) {
+      } else if (role == "GuestAdmin") {
         router.push(`/adminDashboard`);
       } else {
         setErrorMessage('Unknown role.');
@@ -78,15 +76,7 @@ const LoginForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label htmlFor='password' className='block mb-2 font-semibold'>Password</label>
-        <input
-          type='password'
-          id='password'
-          placeholder='Enter password'
-          className='w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        
         <button
           className='w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors'
           onClick={handleLogin}
