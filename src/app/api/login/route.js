@@ -1,56 +1,52 @@
-// app/api/login/route.js
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/db'; // Import your database connection
+import { prisma } from '../../../lib/prisma';
 
 export async function POST(request) {
   try {
     // Parse the incoming request data (email and password)
-    const { email } = await request.json();
+    const { email, password } = await request.json();
 
     // Validate if email and password are provided
-    if (!email ) {
+    if (!email || !password) {
       return NextResponse.json(
         { message: 'Email and password are required' },
         { status: 400 }
       );
     }
 
-    // Connect to the database
-    const connection = await connectToDatabase();
-
-    // Query the database for a user with the provided email
-    const [rows] = await connection.execute('SELECT * FROM guest_users WHERE email = ?', [email]);
+    // Query the database for a user with the provided email using Prisma
+    const user = await prisma.guest_users.findUnique({
+      where: { email },
+    });
 
     // If no user is found, return a 404 response
-    if (rows.length === 0) {
+    if (!user) {
       return NextResponse.json(
         { message: 'User not found' },
         { status: 404 }
       );
     }
 
-    // Extract the user from the database result
-    const user = rows[0];
+    console.log('Stored hash:', user.password);  // Log the stored password hash
+const match = await bcrypt.compare(password, user.password);
+console.log('Password match:', match);  // Log the result of comparison
 
-    // Compare the provided password with the hashed password stored in the database
-    // const match = await bcrypt.compare(password, user.password);
 
     // If the password doesn't match, return a 401 response
-    // if (!match) {
-    //   return NextResponse.json(
-    //     { message: 'Invalid password' },
-    //     { status: 401 }
-    //   );
-    // }
+    if (!match) {
+      return NextResponse.json(
+        { message: 'Invalid password' },
+        { status: 401 }
+      );
+    }
 
     // Remove sensitive data before returning the user object
     const { password: _, ...safeUserData } = user;
 
-    // Return success response with the user data (without the password)
     return NextResponse.json({
       message: 'Login successful',
-      user: safeUserData // Return only safe user data
+      user: safeUserData,
     });
 
   } catch (error) {

@@ -6,12 +6,13 @@ import { UserContext } from '../contexts/userContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');  // State for password
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter(); 
   const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
-    if (email.trim() === '' ) {
+    if (email.trim() === '' || password.trim() === '') {
       setErrorMessage('Please enter both email and password.');
       return;
     }
@@ -22,7 +23,7 @@ const LoginForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),  // Include password in the request body
       });
 
       if (!res.ok) {
@@ -36,13 +37,15 @@ const LoginForm = () => {
       console.log('Login successful', data);
 
       // Extract user details
-      const { username, id,  role } = data.user;
+      const { username, id, role, college_id, campus_id } = data.user;
 
       // Set user details in context and localStorage
       setUser({
         username,
         userId: id,
         role,
+        college_id, 
+        campus_id,
       });
 
       // Redirect based on role_id
@@ -50,7 +53,7 @@ const LoginForm = () => {
         router.push(`/facultydashboard`);
       } else if (role === "AdminOffice") {
         router.push(`/officeDashboard`);
-      } else if (role == "GuestAdmin") {
+      } else if (role === "guestAdmin") {
         router.push(`/adminDashboard`);
       } else {
         setErrorMessage('Unknown role.');
@@ -75,6 +78,16 @@ const LoginForm = () => {
           className='w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+        />
+        
+        <label htmlFor='password' className='block mb-2 font-semibold'>Password</label>
+        <input
+          type='password'  // Make this a password input field
+          id='password'
+          placeholder='Enter password'
+          className='w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}  // Update password state
         />
         
         <button

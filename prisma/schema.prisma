@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model guest_drivers {
+  driver_id          Int                 @id @default(autoincrement())
+  name               String
+  phonenumber        String
+  status             String
+  vehicleallocations vehicleallocation[]
+}
+
+model guest_vehicles {
+  vehicle_id         Int                 @id @default(autoincrement())
+  vehicle_number     String
+  name               String
+  status             String
+  vehicle_type       String
+  vehicleallocations vehicleallocation[]
+}
+
+model guest_users {
+  id            Int             @id @default(autoincrement())
+  college_id    Int
+  university_id String
+  campus_id     String
+  role          String
+  username      String
+  course        String
+  branch        String
+  email         String @unique
+  phone_number  String
+  password      String
+  guestrequests guestrequests[]
+}
+
+model guest_houses {
+  id             Int              @id @default(autoincrement())
+  name           String
+  location       String
+  rooms          Int
+  available      Int
+  guest_rooms    guest_rooms[]
+  roomallocation roomallocation[]
+}
+
+model guestrequests {
+  gRequestId          Int                @id @default(autoincrement())
+  guest_name          String
+  guest_email         String
+  guest_mobile_number String
+  request_status      String
+  vehicle_req         String
+  room_req            String
+  no_of_persons       Int
+  purpose_of_visit    String
+  user_id             Int
+  user                guest_users        @relation(fields: [user_id], references: [id])
+  roomallocation      roomallocation?
+  vehicleallocation   vehicleallocation?
+
+  @@index([user_id])
+}
+
+model vehicleallocation {
+  vehicle_requestId   Int            @id @default(autoincrement())
+  gRequestId          Int            @unique
+  guest_pickup_place  String
+  guest_pickup_time   DateTime
+  vehicle_start_time  DateTime
+  vehicle_return_time DateTime
+  vehicle_id          Int
+  driver_id           Int
+  status              String
+  guestrequest        guestrequests  @relation(fields: [gRequestId], references: [gRequestId])
+  vehicle             guest_vehicles @relation(fields: [vehicle_id], references: [vehicle_id])
+  driver              guest_drivers  @relation(fields: [driver_id], references: [driver_id])
+  guest_rooms         guest_rooms[]
+
+  @@index([vehicle_id])
+  @@index([driver_id])
+}
+
+model roomallocation {
+  room_reqId   Int           @id @default(autoincrement())
+  gRequestId   Int           @unique
+  date_from    DateTime
+  date_to      DateTime
+  room_id      Int
+  house_id     Int
+  guestrequest guestrequests @relation(fields: [gRequestId], references: [gRequestId])
+  guest_room   guest_rooms   @relation(fields: [room_id], references: [room_id])
+  guest_house  guest_houses  @relation(fields: [house_id], references: [id])
+
+  @@index([room_id])
+  @@index([house_id])
+}
+
+model guest_rooms {
+  room_id           Int               @id @default(autoincrement())
+  roomNumber        Int
+  housed            Int
+  status            String
+  vehicleRequestId  Int
+  guest_house       guest_houses      @relation(fields: [housed], references: [id])
+  vehicleallocation vehicleallocation @relation(fields: [vehicleRequestId], references: [vehicle_requestId])
+  roomallocation    roomallocation[]
+
+  @@index([housed])
+  @@index([vehicleRequestId])
+}
